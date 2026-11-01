@@ -152,7 +152,7 @@ jobs:
   verdict:
     needs: [canary, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth]
     if: ${{ always() }}
-    runs-on: ubuntu-latest
+    runs-on: ai-fleet-amd64
     timeout-minutes: 5
     steps:
       - name: Checkout

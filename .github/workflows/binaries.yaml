@@ -43,7 +43,7 @@ concurrency:
 jobs:
   build:
     name: Build and test ${{ matrix.target }}
-    runs-on: ${{ matrix.runner }}
+    runs-on: "${{ contains(matrix.runner, 'macos') && !contains(matrix.runner, 'windows') && !(contains(matrix.runner, 'ubuntu') || contains(matrix.runner, 'linux')) && 'ai-fleet-unrouted-macos' || contains(matrix.runner, 'windows') && !contains(matrix.runner, 'macos') && !(contains(matrix.runner, 'ubuntu') || contains(matrix.runner, 'linux')) && !contains(matrix.runner, 'arm') && 'ai-fleet-unrouted-windows' || (contains(matrix.runner, 'ubuntu') || contains(matrix.runner, 'linux')) && !contains(matrix.runner, 'windows') && !contains(matrix.runner, 'macos') && !contains(matrix.runner, 'arm') && 'ai-fleet-amd64' || 'ai-fleet-unrouted' }}"
     timeout-minutes: 60
     strategy:
       fail-fast: false
@@ -121,7 +121,7 @@ jobs:
   # tests' process-tree walk needs procps: BusyBox `ps` has no `-p`.
   build-musl:
     name: Build and test ${{ matrix.target }}
-    runs-on: ${{ matrix.runner }}
+    runs-on: "${{ contains(matrix.runner, 'macos') && !contains(matrix.runner, 'windows') && !(contains(matrix.runner, 'ubuntu') || contains(matrix.runner, 'linux')) && 'ai-fleet-unrouted-macos' || contains(matrix.runner, 'windows') && !contains(matrix.runner, 'macos') && !(contains(matrix.runner, 'ubuntu') || contains(matrix.runner, 'linux')) && !contains(matrix.runner, 'arm') && 'ai-fleet-unrouted-windows' || (contains(matrix.runner, 'ubuntu') || contains(matrix.runner, 'linux')) && !contains(matrix.runner, 'windows') && !contains(matrix.runner, 'macos') && !contains(matrix.runner, 'arm') && 'ai-fleet-amd64' || 'ai-fleet-unrouted' }}"
     timeout-minutes: 60
     strategy:
       fail-fast: false
@@ -160,7 +160,7 @@ jobs:
     name: Attach to the release
     if: github.event_name != 'pull_request'
     needs: [build, build-musl]
-    runs-on: ubuntu-latest
+    runs-on: ai-fleet-amd64
     timeout-minutes: 15
     permissions:
       contents: write
@@ -200,7 +200,7 @@ jobs:
   homebrew:
     name: Point the Homebrew tap at the release
     needs: release
-    runs-on: ubuntu-latest
+    runs-on: ai-fleet-amd64
     timeout-minutes: 45
     steps:
       - name: Checkout
@@ -246,7 +246,7 @@ jobs:
   homebrew-verify:
     name: Install from the tap on ${{ matrix.runner }}
     needs: homebrew
-    runs-on: ${{ matrix.runner }}
+    runs-on: "${{ contains(matrix.runner, 'macos') && !contains(matrix.runner, 'windows') && !(contains(matrix.runner, 'ubuntu') || contains(matrix.runner, 'linux')) && 'ai-fleet-unrouted-macos' || contains(matrix.runner, 'windows') && !contains(matrix.runner, 'macos') && !(contains(matrix.runner, 'ubuntu') || contains(matrix.runner, 'linux')) && !contains(matrix.runner, 'arm') && 'ai-fleet-unrouted-windows' || (contains(matrix.runner, 'ubuntu') || contains(matrix.runner, 'linux')) && !contains(matrix.runner, 'windows') && !contains(matrix.runner, 'macos') && !contains(matrix.runner, 'arm') && 'ai-fleet-amd64' || 'ai-fleet-unrouted' }}"
     timeout-minutes: 30
     strategy:
       fail-fast: false

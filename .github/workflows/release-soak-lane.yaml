@@ -32,7 +32,7 @@ env:
 jobs:
   exercise:
     name: ${{ inputs.label }} / Node ${{ matrix.node }} / ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    runs-on: "${{ contains(matrix.os, 'macos') && !contains(matrix.os, 'windows') && !(contains(matrix.os, 'ubuntu') || contains(matrix.os, 'linux')) && 'ai-fleet-unrouted-macos' || contains(matrix.os, 'windows') && !contains(matrix.os, 'macos') && !(contains(matrix.os, 'ubuntu') || contains(matrix.os, 'linux')) && !contains(matrix.os, 'arm') && 'ai-fleet-unrouted-windows' || (contains(matrix.os, 'ubuntu') || contains(matrix.os, 'linux')) && !contains(matrix.os, 'windows') && !contains(matrix.os, 'macos') && !contains(matrix.os, 'arm') && 'ai-fleet-amd64' || 'ai-fleet-unrouted' }}"
     # Five-hour phases, plus install, the finite continuation check, the
     # real-server and Inspector preflight and cooldowns: the hosted maximum.
     timeout-minutes: 360
@@ -111,7 +111,7 @@ jobs:
   # versions are the ones the cross-client CI job pins (tests.yaml).
   languages:
     name: ${{ inputs.label }} / Python, Go and Ruby clients / ubuntu-latest
-    runs-on: ubuntu-latest
+    runs-on: ai-fleet-amd64
     timeout-minutes: 360
     env:
       SOAK_DIRECTORY: .release/languages
@@ -172,7 +172,7 @@ jobs:
   # resource gates here, on both POSIX platforms.
   scenarios:
     name: ${{ inputs.label }} / scenarios / Node 24 / ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    runs-on: "${{ contains(matrix.os, 'macos') && !contains(matrix.os, 'windows') && !(contains(matrix.os, 'ubuntu') || contains(matrix.os, 'linux')) && 'ai-fleet-unrouted-macos' || contains(matrix.os, 'windows') && !contains(matrix.os, 'macos') && !(contains(matrix.os, 'ubuntu') || contains(matrix.os, 'linux')) && !contains(matrix.os, 'arm') && 'ai-fleet-unrouted-windows' || (contains(matrix.os, 'ubuntu') || contains(matrix.os, 'linux')) && !contains(matrix.os, 'windows') && !contains(matrix.os, 'macos') && !contains(matrix.os, 'arm') && 'ai-fleet-amd64' || 'ai-fleet-unrouted' }}"
     timeout-minutes: 360
     strategy:
       fail-fast: false

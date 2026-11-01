@@ -27,7 +27,7 @@ jobs:
   # hides — this keeps both directions covered.
   test:
     name: Suite on Node ${{ matrix.node }} / ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    runs-on: "${{ contains(matrix.os, 'macos') && !contains(matrix.os, 'windows') && !(contains(matrix.os, 'ubuntu') || contains(matrix.os, 'linux')) && 'ai-fleet-unrouted-macos' || contains(matrix.os, 'windows') && !contains(matrix.os, 'macos') && !(contains(matrix.os, 'ubuntu') || contains(matrix.os, 'linux')) && !contains(matrix.os, 'arm') && 'ai-fleet-unrouted-windows' || (contains(matrix.os, 'ubuntu') || contains(matrix.os, 'linux')) && !contains(matrix.os, 'windows') && !contains(matrix.os, 'macos') && !contains(matrix.os, 'arm') && 'ai-fleet-amd64' || 'ai-fleet-unrouted' }}"
     timeout-minutes: 35
     strategy:
       fail-fast: false
@@ -77,7 +77,7 @@ jobs:
   # not an error but an immediate process exit.
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: ai-fleet-amd64
     timeout-minutes: 5
     steps:
       - name: Checkout
@@ -124,7 +124,7 @@ jobs:
   # then it is measured locally and quoted in the pull request.
   coverage:
     name: Coverage gate
-    runs-on: ubuntu-latest
+    runs-on: ai-fleet-amd64
     # The measured suite took 29 of 30 minutes once the multi-server tests
     # were in, and the check after it was cut off.
     timeout-minutes: 50
@@ -184,7 +184,7 @@ jobs:
   # specification gap rather than a regression, and not this job's business.
   python-client:
     name: Cross-client battery
-    runs-on: ubuntu-latest
+    runs-on: ai-fleet-amd64
     timeout-minutes: 15
     steps:
       - name: Checkout
@@ -292,7 +292,7 @@ jobs:
   # See SDK-SECURITY.md and SDK-SUPPORT.md in supergateway-company.
   sdk:
     name: SDK ${{ matrix.sdk }}
-    runs-on: ubuntu-latest
+    runs-on: ai-fleet-amd64
     timeout-minutes: 35
     strategy:
       fail-fast: false
@@ -350,7 +350,7 @@ jobs:
   # tests/crossVersion.baselines.json and to the matrix below.
   versions:
     name: Side by side with ${{ matrix.release }}
-    runs-on: ubuntu-latest
+    runs-on: ai-fleet-amd64
     timeout-minutes: 15
     strategy:
       fail-fast: false
@@ -374,7 +374,7 @@ jobs:
 
   released-tests:
     name: The tests of ${{ matrix.release }} against this build
-    runs-on: ubuntu-latest
+    runs-on: ai-fleet-amd64
     timeout-minutes: 35
     strategy:
       fail-fast: false
@@ -404,7 +404,7 @@ jobs:
   # part that catches platform differences, as GW-015 showed.
   compat:
     name: Compatible suite on Node ${{ matrix.node }} / ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    runs-on: "${{ contains(matrix.os, 'macos') && !contains(matrix.os, 'windows') && !(contains(matrix.os, 'ubuntu') || contains(matrix.os, 'linux')) && 'ai-fleet-unrouted-macos' || contains(matrix.os, 'windows') && !contains(matrix.os, 'macos') && !(contains(matrix.os, 'ubuntu') || contains(matrix.os, 'linux')) && !contains(matrix.os, 'arm') && 'ai-fleet-unrouted-windows' || (contains(matrix.os, 'ubuntu') || contains(matrix.os, 'linux')) && !contains(matrix.os, 'windows') && !contains(matrix.os, 'macos') && !contains(matrix.os, 'arm') && 'ai-fleet-amd64' || 'ai-fleet-unrouted' }}"
     timeout-minutes: 35
     strategy:
       fail-fast: false
@@ -435,7 +435,7 @@ jobs:
   # No publication is involved.
   package:
     name: Package on Node ${{ matrix.node }} / ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    runs-on: "${{ contains(matrix.os, 'macos') && !contains(matrix.os, 'windows') && !(contains(matrix.os, 'ubuntu') || contains(matrix.os, 'linux')) && 'ai-fleet-unrouted-macos' || contains(matrix.os, 'windows') && !contains(matrix.os, 'macos') && !(contains(matrix.os, 'ubuntu') || contains(matrix.os, 'linux')) && !contains(matrix.os, 'arm') && 'ai-fleet-unrouted-windows' || (contains(matrix.os, 'ubuntu') || contains(matrix.os, 'linux')) && !contains(matrix.os, 'windows') && !contains(matrix.os, 'macos') && !contains(matrix.os, 'arm') && 'ai-fleet-amd64' || 'ai-fleet-unrouted' }}"
     # Windows cold installs and unpacking can consume most of a 20-minute job.
     # Keep separate bounded deadlines for installs and behavioral checks.
     timeout-minutes: ${{ matrix.os == 'windows-latest' && 35 || 20 }}
@@ -471,7 +471,7 @@ jobs:
   # announces its listener and serves a request there.
   smoke:
     name: Built gateway starts on Node ${{ matrix.node }} (alpine)
-    runs-on: ubuntu-latest
+    runs-on: ai-fleet-amd64
     timeout-minutes: 8
     strategy:
       fail-fast: false
@@ -531,7 +531,7 @@ jobs:
   # depends on the working tree the way the suite does.
   docker:
     name: Candidate images / ${{ matrix.arch }}
-    runs-on: ubuntu-24.04-arm
+    runs-on: ai-fleet-unrouted
     timeout-minutes: 30
     strategy:
       fail-fast: false
